@@ -1,0 +1,53 @@
+import logging
+from time import perf_counter
+
+import numpy as np
+
+
+class Task:
+    def __init__(self, identifier: int, size: int):
+        """
+        Initializes a task with a specified identifier and size.
+
+        :param identifier: The identifier of the task.
+        :param size: The size of vectors to generate for the linear system.
+        """
+        self.identifier = identifier
+        self.size = size
+        self.execution_time = None
+
+    def work(self) -> float:
+        """
+        Performs the task by solving a linear system AX=B.
+
+        Generates random vectors a and b of the specified size,
+        solves the linear system AX=B using numpy.linalg.solve,
+        measures the execution time, and prints in DEBUG the solution.
+
+        :return: The execution time of the task in seconds.
+        """
+        # generate random vectors a, b of size size
+        a = np.random.rand(self.size, self.size)
+        b = np.random.rand(self.size)
+
+        # solve linear system ax=b and measure start and stop time
+        start_time = perf_counter()
+        np.linalg.solve(a, b)
+        end_time = perf_counter()
+
+        # compute execution time
+        self.execution_time = end_time - start_time
+
+        # print the task id and the execution time
+        logging.debug(f"Task {self.identifier}: {self.execution_time:.2f} seconds")
+
+        # return execution time
+        return self.execution_time
+
+
+if __name__ == "__main__":
+    # Example of usage
+    logging.basicConfig(level=logging.DEBUG)
+
+    task = Task(1, 2000)
+    execution_time = task.work()
