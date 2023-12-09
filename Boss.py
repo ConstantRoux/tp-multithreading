@@ -16,7 +16,7 @@ class Boss(QueueClient):
         """
         super().__init__(address=address, authkey=authkey)
 
-    def put_task(self, identifier: int, size: int):
+    def put_task(self, identifier: int, size: int) -> None:
         """
         Adds a task to the task queue.
 
@@ -32,7 +32,7 @@ class Boss(QueueClient):
         # Logging the addition of the task
         logging.debug(f"Boss added task {identifier} of size {size}")
 
-    def get_result(self, n: int):
+    def get_result(self, n: int) -> None:
         """
         Retrieves and prints results from the result queue.
 
