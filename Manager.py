@@ -59,8 +59,10 @@ if __name__ == "__main__":
     queueManager = QueueManager(address=(IP, PORT), authkey=KEY)
 
     # Registering methods for task and result queues with the QueueManager
-    QueueManager.register("get_tasks", callable=lambda: Queue())
-    QueueManager.register("get_results", callable=lambda: Queue())
+    task_queue = Queue()
+    result_queue = Queue()
+    QueueManager.register("get_tasks", callable=lambda: task_queue)
+    QueueManager.register("get_results", callable=lambda: result_queue)
 
     # Getting the server from the QueueManager and starting it to serve forever
     queueManager.get_server().serve_forever()
