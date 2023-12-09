@@ -65,4 +65,9 @@ if __name__ == "__main__":
     QueueManager.register("get_results", callable=lambda: result_queue)
 
     # Getting the server from the QueueManager and starting it to serve forever
-    queueManager.get_server().serve_forever()
+    try:
+        queueManager.get_server().serve_forever()
+    finally:
+        print(
+            f"Exiting with {task_queue.qsize()} tasks and {result_queue.qsize()} results remaining"
+        )
