@@ -2,7 +2,7 @@
 
 # TP Multithreading
 
-[![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://opensource.org/license/apache-1-1/)
+[![License](https://img.shields.io/badge/License-Apache-blue.svg)](https://opensource.org/license/apache-2-0/)
 ![Test](https://img.shields.io/badge/Test-Succeeded-green)
 
 </p>
