@@ -5,15 +5,17 @@ from Manager import QueueClient
 
 
 class Minion(QueueClient):
-    def __init__(self, address: Tuple[str, int], authkey: bytes):
+    def __init__(self, address: Tuple[str, int], authkey: bytes, identifier: int):
         """
         Initializes a Minion instance.
 
         :param address: The address of the queue manager composed of a string containing the IP and an int containing
         the port.
         :param authkey: The authentication key in bytes.
+        :param identifier: The identifier of the minion.
         """
         super().__init__(address, authkey)
+        self.identifier = identifier
 
     def work(self) -> None:
         """
@@ -37,7 +39,7 @@ class Minion(QueueClient):
 
             # Log the completion of the task
             logging.debug(
-                f"Minion finished task {task.identifier} in {task.execution_time:.2f} seconds"
+                f"Minion {self.identifier} finished task {task.identifier} in {task.execution_time:.2f} seconds"
             )
 
 
@@ -60,7 +62,7 @@ if __name__ == "__main__":
 
     try:
         # Creating a Minion instance and attempting to connect to the QueueManager
-        minion = Minion(address=(IP, PORT), authkey=KEY)
+        minion = Minion(address=(IP, PORT), authkey=KEY, identifier=1)
     except ConnectionRefusedError:
         # Handling the case where the connection is refused
         logging.error(f"Connection at ({IP}:{PORT}) with authkey {KEY} refused")
