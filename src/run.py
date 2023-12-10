@@ -32,7 +32,7 @@ def start_minion(ip: str, port: int, key: bytes, identifier: int):
         # Creating a Minion instance and attempting to connect to the QueueManager
         minion = Minion(address=(ip, port), authkey=key, identifier=identifier)
         logging.debug(
-            f"Connection of minion {identifier} at ({ip}:{port}) with authkey {key} succeed"
+            f"Connection of minion {identifier} at ({ip}:{port}) with authkey {key} succeeded"
         )
 
         # Minion starts working (processing tasks) indefinitely
