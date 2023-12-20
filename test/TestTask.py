@@ -1,5 +1,7 @@
 import unittest
 
+import numpy as np
+
 from src.Task import Task
 
 
@@ -10,11 +12,17 @@ class TestTask(unittest.TestCase):
         self.assertEqual(task.identifier, 1)
         self.assertEqual(task.size, 100)
         self.assertIsNone(task.execution_time)
+        self.assertEqual(task.X.shape[0], task.size)
+        self.assertEqual(task.b.shape[0], task.size)
+        self.assertEqual(task.A.shape[0], task.size)
+        self.assertEqual(task.A.shape[1], task.size)
 
     def test_task_work(self):
         # Test the work method of Task
         task = Task(identifier=1, size=100)
         task.work()
+        self.assertEqual(task.X.shape[0], task.size)
+        self.assertLessEqual(np.linalg.norm(task.A @ task.X - task.b), 1e-7)
         self.assertIsNotNone(task.execution_time)
 
     def test_task_eq(self):
