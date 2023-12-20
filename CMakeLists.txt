@@ -22,6 +22,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json eigen cpr)
 find_package(OpenMP REQUIRED COMPONENTS CXX)
 
-add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
+add_executable(${PROJECT_NAME} src/${PROJECT_NAME}.cpp)
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json cpr::cpr
                       Eigen3::Eigen OpenMP::OpenMP_CXX)
