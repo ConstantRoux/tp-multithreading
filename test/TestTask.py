@@ -17,6 +17,24 @@ class TestTask(unittest.TestCase):
         task.work()
         self.assertIsNotNone(task.execution_time)
 
+    def test_task_eq(self):
+        # Test class comparison
+        task1 = Task(identifier=1, size=100)
+        list1 = []
+        self.assertNotEqual(task1, list1)
+
+        task2 = Task(identifier=2, size=100)
+        self.assertNotEqual(task1, task2)
+
+        task3 = Task(identifier=1, size=10)
+        self.assertNotEqual(task1, task3)
+
+        task4 = Task(identifier=3, size=1000)
+        self.assertNotEqual(task1, task4)
+
+        task5 = Task(identifier=1, size=100)
+        self.assertEqual(task1, task5)
+
 
 if __name__ == "__main__":
     unittest.main()
