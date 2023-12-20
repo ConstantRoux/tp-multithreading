@@ -1,3 +1,4 @@
+import json
 import logging
 from time import perf_counter
 
@@ -43,6 +44,39 @@ class Task:
 
         # return execution time
         return self.execution_time
+
+    def to_json(self) -> str:
+        # serialize args of the current instantiation
+        data = {
+            "identifier": self.identifier,
+            "size": self.size,
+            "A": self.A.tolist(),
+            "X": self.X.tolist(),
+            "b": self.b.tolist(),
+            "execution_time": self.execution_time,
+        }
+
+        # convert the dictionary in json
+        return json.dumps(data)
+
+    @classmethod
+    def from_json(cls, data_json: str) -> "Task":
+        # deserialize data from json
+        data = json.loads(data_json)
+
+        # create new instantiation of Task
+        task = cls(identifier=data["identifier"], size=data["size"])
+
+        # get execution time
+        task.execution_time = data["execution_time"]
+
+        # get numpy arrays
+        task.A = np.array(data["A"])
+        task.X = np.array(data["X"])
+        task.b = np.array(data["b"])
+
+        # return the new task generated from json
+        return task
 
     def __eq__(self, other: "Task") -> bool:
         """
