@@ -37,7 +37,7 @@ Launch the  provided `venv_install.sh` script from the _root_ of this project:
 
 1. Run the project using the provided `run.py` script  from the _root_ of this project:
    ```bash
-   clear & python3 src/run.py
+   clear & python3 tp_multithreading/run.py
    ```
 
 2. Monitor the output for task execution and results.

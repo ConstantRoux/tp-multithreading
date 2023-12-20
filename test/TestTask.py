@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import numpy as np
 
-from src.Task import Task
+from tp_multithreading.Task import Task
 
 
 class TestTask(unittest.TestCase):
