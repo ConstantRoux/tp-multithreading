@@ -3,8 +3,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from json import dumps
 
-from manager import QueueClient
-from task import Task
+from Manager import QueueClient
+from Task import Task
 
 
 class Proxy(BaseHTTPRequestHandler):
@@ -16,7 +16,7 @@ class Proxy(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
-        t = self.client.task_queue.get()
+        t = self.client.get_tasks.get()
         self.wfile.write(bytes(t.to_json(), "utf-8"))
 
     def do_POST(self):
@@ -26,7 +26,7 @@ class Proxy(BaseHTTPRequestHandler):
         content_length = int(self.headers.get("content-length"))
         content = self.rfile.read(content_length)
         t = Task.from_json(content.decode())
-        t = self.client.result_queue.put(t)
+        t = self.client.get_results.put(t)
         self.wfile.write(bytes(dumps({"status": "ok"}), "utf-8"))
 
 
