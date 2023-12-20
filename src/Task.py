@@ -56,11 +56,22 @@ class Task:
             return False
 
         # compare identifier, size and execution time
-        return (
+        if not (
             self.identifier == other.identifier
             and self.size == other.size
             and self.execution_time == other.execution_time
-        )
+        ):
+            return False
+
+        # compare A, b, X matrices
+        if not (
+            np.array_equal(self.A, other.A)
+            and np.array_equal(self.b, other.b)
+            and np.array_equal(self.X, other.X)
+        ):
+            return False
+
+        return True
 
 
 if __name__ == "__main__":
