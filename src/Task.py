@@ -43,6 +43,24 @@ class Task:
         # return execution time
         return self.execution_time
 
+    def __eq__(self, other: "Task") -> bool:
+        """
+        Compare the current Task class instantiation with the other object.
+
+        :param other: The object to compare.
+        :return: True if object is equal to the current instantiation, False otherwise.
+        """
+        # check if the object other is an instance of the class Task
+        if not isinstance(other, Task):
+            return False
+
+        # compare identifier, size and execution time
+        return (
+            self.identifier == other.identifier
+            and self.size == other.size
+            and self.execution_time == other.execution_time
+        )
+
 
 if __name__ == "__main__":
     """
