@@ -1,4 +1,5 @@
 import unittest
+from copy import deepcopy
 
 import numpy as np
 
@@ -27,21 +28,48 @@ class TestTask(unittest.TestCase):
 
     def test_task_eq(self):
         # Test class comparison
+        # test object instantiation
         task1 = Task(identifier=1, size=100)
         list1 = []
         self.assertNotEqual(task1, list1)
 
+        # test object with different id
         task2 = Task(identifier=2, size=100)
         self.assertNotEqual(task1, task2)
 
+        # test object with different size
         task3 = Task(identifier=1, size=10)
         self.assertNotEqual(task1, task3)
 
+        # test object with different id and different size
         task4 = Task(identifier=3, size=1000)
         self.assertNotEqual(task1, task4)
 
+        # test object with same id and same size but with different A, b, X
         task5 = Task(identifier=1, size=100)
-        self.assertEqual(task1, task5)
+        self.assertNotEqual(task1, task5)
+
+        # test object with itself
+        self.assertEqual(task1, task1)
+
+        # test object with copy of itself
+        self.assertEqual(task1, deepcopy(task1))
+
+        # test object with a copy of it and a simple modification on A
+        task6 = deepcopy(task1)
+        task6.A[0, 0] = task1.A[0, 0] + 1
+        self.assertNotEqual(task1, task6)
+
+        # test object with a copy of it and a simple modification on b
+        task7 = deepcopy(task1)
+        task7.b[0] = task7.b[0] + 1
+        self.assertNotEqual(task1, task7)
+
+        # test object with a copy of it and a simple modification on X
+        task8 = deepcopy(task1)
+
+        task8.X[0] = task8.X[0] + 1
+        self.assertNotEqual(task1, task8)
 
 
 if __name__ == "__main__":
