@@ -14,24 +14,25 @@ class Task:
         """
         self.identifier = identifier
         self.size = size
+
+        self.A = np.random.rand(self.size, self.size)
+        self.X = np.zeros(self.size)
+        self.b = np.random.rand(self.size)
+
         self.execution_time = None
 
     def work(self) -> float:
         """
         Performs the task by solving a linear system AX=B.
 
-        Generates random vectors a and b of the specified size, solves the linear system AX=B using numpy.linalg.solve,
-        measures the execution time, and prints in DEBUG the solution.
+        Uses the generated random vectors A and b of the specified size, solves the linear system AX=b using numpy.linalg.solve,
+        saves the solution in X, measures the execution time, and prints in DEBUG the solution.
 
         :return: The execution time of the task in seconds.
         """
-        # generate random vectors a, b of size size
-        a = np.random.rand(self.size, self.size)
-        b = np.random.rand(self.size)
-
         # solve linear system ax=b and measure start and stop time
         start_time = perf_counter()
-        np.linalg.solve(a, b)
+        self.X = np.linalg.solve(self.A, self.b)
         end_time = perf_counter()
 
         # compute execution time
