@@ -26,6 +26,20 @@ class TestTask(unittest.TestCase):
         self.assertLessEqual(np.linalg.norm(task.A @ task.X - task.b), 1e-7)
         self.assertIsNotNone(task.execution_time)
 
+    def test_json(self):
+        # test to test the serialization/deserialization
+        task = Task(1, 100)
+        task.work()
+
+        # serialize the task
+        task_json = task.to_json()
+
+        # deserialize task
+        task_after_json = Task.from_json(task_json)
+
+        # check if it still the same object
+        self.assertEqual(task, task_after_json)
+
     def test_task_eq(self):
         # Test class comparison
         # test object instantiation
