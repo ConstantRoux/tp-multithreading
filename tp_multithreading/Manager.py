@@ -1,6 +1,12 @@
 from multiprocessing import Queue
 from multiprocessing.managers import BaseManager
-from typing import Tuple
+
+# global variables for the connection
+IP = "localhost"
+PORT = 1024
+KEY = b"clef tres secrete"
+
+ADDRESS = (IP, PORT)
 
 
 class QueueManager(BaseManager):
@@ -15,20 +21,16 @@ class QueueManager(BaseManager):
 
 
 class QueueClient:
-    def __init__(self, address: Tuple[str, int], authkey: bytes):
+    def __init__(self):
         """
         Initializes a queue client with a specified address (composed of an IP and a port) and authentication key.
-
-        :param address: The address of the queue manager composed of a string containing the IP and an int containing
-        the port.
-        :param authkey: The authentication key in bytes.
         """
         # Registering methods for task and result queues in the manager
         QueueManager.register("get_tasks")
         QueueManager.register("get_results")
 
         # Creating a QueueManager instance with the provided address and authentication key
-        manager = QueueManager(address=address, authkey=authkey)
+        manager = QueueManager(address=ADDRESS, authkey=KEY)
 
         try:
             # Connecting to the manager
@@ -49,14 +51,8 @@ if __name__ == "__main__":
     "get_results," are registered with the manager, allowing processes to obtain task and result queues. The server is
     then started to serve forever, waiting for incoming connections and facilitating communication among processes.
     """
-
-    # Configuration values for the QueueManager
-    IP = "localhost"
-    PORT = 1024
-    KEY = b"clef tres secrete"
-
     # Creating an instance of QueueManager with specified address and authentication key
-    queueManager = QueueManager(address=(IP, PORT), authkey=KEY)
+    queueManager = QueueManager(address=ADDRESS, authkey=KEY)
 
     # Registering methods for task and result queues with the QueueManager
     task_queue = Queue()

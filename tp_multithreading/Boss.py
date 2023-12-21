@@ -1,20 +1,15 @@
 import logging
-from typing import Tuple
 
-from Manager import QueueClient
+from Manager import IP, KEY, PORT, QueueClient
 from Task import Task
 
 
 class Boss(QueueClient):
-    def __init__(self, address: Tuple[str, int], authkey: bytes):
+    def __init__(self):
         """
         Initializes a Boss instance.
-
-        :param address: The address of the queue manager composed of a string containing the IP and an int containing
-        the port.
-        :param authkey: The authentication key in bytes.
         """
-        super().__init__(address=address, authkey=authkey)
+        super().__init__()
 
     def put_task(self, identifier: int, size: int) -> None:
         """
@@ -55,9 +50,6 @@ if __name__ == "__main__":
     the script with a status of 1.
     """
     # Configuration values for the QueueManager and tasks
-    IP = "localhost"
-    PORT = 1024
-    KEY = b"clef tres secrete"
     N = 10  # Number of tasks
     SIZE = 100  # Size of vectors for tasks
 
@@ -66,7 +58,7 @@ if __name__ == "__main__":
 
     try:
         # Creating a Boss instance and attempting to connect to the QueueManager
-        boss = Boss(address=(IP, PORT), authkey=KEY)
+        boss = Boss()
         logging.info(f"Connection at ({IP}:{PORT}) with authkey {KEY} succeeded")
     except ConnectionRefusedError:
         # Handling the case where the connection is refused

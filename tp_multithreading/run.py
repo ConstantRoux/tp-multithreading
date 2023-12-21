@@ -3,13 +3,13 @@ import time
 from multiprocessing import Process, Queue
 
 from Boss import Boss
-from Manager import QueueManager
+from Manager import ADDRESS, IP, KEY, PORT, QueueManager
 from Minion import Minion
 
 
-def start_manager(ip: str, port: int, key: bytes):
+def start_manager():
     # Creating an instance of QueueManager with specified address and authentication key
-    queueManager = QueueManager(address=(ip, port), authkey=key)
+    queueManager = QueueManager(address=ADDRESS, authkey=KEY)
     logging.debug("Queue manager launched")
 
     # Registering methods for task and result queues with the QueueManager
@@ -27,12 +27,12 @@ def start_manager(ip: str, port: int, key: bytes):
         )
 
 
-def start_minion(ip: str, port: int, key: bytes, identifier: int):
+def start_minion(identifier: int):
     try:
         # Creating a Minion instance and attempting to connect to the QueueManager
-        minion = Minion(address=(ip, port), authkey=key, identifier=identifier)
+        minion = Minion(identifier=identifier)
         logging.debug(
-            f"Connection of minion {identifier} at ({ip}:{port}) with authkey {key} succeeded"
+            f"Connection of minion {identifier} at ({IP}:{PORT}) with authkey {KEY} succeeded"
         )
 
         # Minion starts working (processing tasks) indefinitely
@@ -40,7 +40,7 @@ def start_minion(ip: str, port: int, key: bytes, identifier: int):
     except ConnectionRefusedError:
         # Handling the case where the connection is refused
         logging.error(
-            f"Connection of minion {identifier} at ({ip}:{port}) with authkey {key} refused"
+            f"Connection of minion {identifier} at ({IP}:{PORT}) with authkey {KEY} refused"
         )
 
 
@@ -48,11 +48,6 @@ if __name__ == "__main__":
     #############
     # Variables #
     #############
-    # Network configuration values
-    IP = "localhost"
-    PORT = 1024
-    KEY = b"clef tres secrete"
-
     # Boss configuration values
     N = 20  # Number of tasks
     SIZE = 2000  # Size of vectors for tasks
@@ -75,11 +70,6 @@ if __name__ == "__main__":
     # Start the manager and keep his PID to kill it later
     p = Process(
         target=start_manager,
-        args=(
-            IP,
-            PORT,
-            KEY,
-        ),
     )
     p.start()
 
@@ -92,7 +82,7 @@ if __name__ == "__main__":
     # Set the task in the queue
     try:
         # Creating a Boss instance and attempting to connect to the QueueManager
-        boss = Boss(address=(IP, PORT), authkey=KEY)
+        boss = Boss()
         logging.info(
             f"Connection of boss at ({IP}:{PORT}) with authkey {KEY} succeeded"
         )
@@ -109,7 +99,7 @@ if __name__ == "__main__":
     # Minions #
     ###########
     for i in range(M):
-        p_m = Process(target=start_minion, args=(IP, PORT, KEY, i))
+        p_m = Process(target=start_minion, args=(i,))
         p_m.start()
 
     #############

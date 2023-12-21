@@ -1,11 +1,10 @@
 import logging
-from typing import Tuple
 
-from Manager import QueueClient
+from Manager import IP, KEY, PORT, QueueClient
 
 
 class Minion(QueueClient):
-    def __init__(self, address: Tuple[str, int], authkey: bytes, identifier: int):
+    def __init__(self, identifier: int):
         """
         Initializes a Minion instance.
 
@@ -14,7 +13,7 @@ class Minion(QueueClient):
         :param authkey: The authentication key in bytes.
         :param identifier: The identifier of the minion.
         """
-        super().__init__(address, authkey)
+        super().__init__()
         self.identifier = identifier
 
     def work(self) -> None:
@@ -51,18 +50,12 @@ if __name__ == "__main__":
     indefinitely by calling the 'work' method. If the connection is refused, it logs an error and exits the script with
     a status of 1.
     """
-
-    # Configuration values for the QueueManager connection
-    IP = "localhost"
-    PORT = 1024
-    KEY = b"clef tres secrete"
-
     # Setting up logging to display DEBUG level messages
     logging.basicConfig(level=logging.DEBUG)
 
     try:
         # Creating a Minion instance and attempting to connect to the QueueManager
-        minion = Minion(address=(IP, PORT), authkey=KEY, identifier=1)
+        minion = Minion(identifier=1)
     except ConnectionRefusedError:
         # Handling the case where the connection is refused
         logging.error(f"Connection at ({IP}:{PORT}) with authkey {KEY} refused")
