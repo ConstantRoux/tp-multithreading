@@ -6,6 +6,7 @@
 #include <nlohmann/json.hpp>
 
 #define CODE_SUCCESS 200
+#define NB_CORES 4
 
 class Minion {
  private:
@@ -51,8 +52,8 @@ class Minion {
     return true;
   }
 
-  float work() {
-    /*
+  double work() {
+    /**
     Performs the task by solving a linear system AX=B.
 
     Uses the generated random vectors A and b of the specified size, solves the
@@ -72,7 +73,8 @@ class Minion {
                          .count();
 
     // print the task id and the execution time
-    printf("Task %d: %lf seconds", identifier, execution_time);
+    std::cout << "Task " << identifier << ": " << execution_time << " seconds"
+              << std::endl;
 
     // return execution time
     return execution_time;
@@ -80,6 +82,7 @@ class Minion {
 };
 
 int main() {
+  // Eigen::setNbThreads(NB_CORES);
   Minion minion;
 
   exit(0);
