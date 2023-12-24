@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set(PROJECT_NAME "low_level")
 project(${PROJECT_NAME})
