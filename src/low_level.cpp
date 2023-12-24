@@ -1,4 +1,5 @@
 #include <cpr/cpr.h>
+#include <unistd.h>
 
 #include <Eigen/Dense>
 #include <chrono>
@@ -30,16 +31,19 @@ class Minion {
    * the initialization function until successful. Once initialized, it proceeds
    * to perform the Minion's work by calling the private work() function.
    *
-   * Note: The constructor might result in an infinite loop if initialization is
-   * never successful.
+   * Note: The constructor features an infinite loop, continually trying to
+   * initialize the Minion. This could lead to a perpetual loop if
+   * initialization is never successful.
    */
   Minion() {
-    // Keep trying to initialize until successful
-    while (!initialization())
-      ;
+    while (true) {
+      // Keep trying to initialize until successful
+      while (!initialization())
+        ;
 
-    // Start the Minion's work after successful initialization
-    work();
+      // Start the Minion's work after successful initialization
+      work();
+    }
   }
 
   /**
@@ -86,8 +90,8 @@ class Minion {
     }
 
     // Print a message indicating successful initialization
-    std::cout << "Minion for task " << identifier << " initialized"
-              << std::endl;
+    std::cout << "Minion " << getpid() << " for task " << identifier
+              << " initialized" << std::endl;
 
     // Return true to indicate successful initialization
     return true;
@@ -116,8 +120,8 @@ class Minion {
                          .count();
 
     // print the task id and the execution time
-    std::cout << "Task " << identifier << ": " << execution_time << " seconds"
-              << std::endl;
+    std::cout << "Minion " << getpid() << " finished task " << identifier
+              << " in " << execution_time << " seconds" << std::endl;
 
     // return execution time
     return execution_time;
