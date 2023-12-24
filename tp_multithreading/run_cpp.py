@@ -1,10 +1,11 @@
 import logging
+import subprocess
 import time
 from multiprocessing import Process, Queue
 
+import proxy
 from Boss import Boss
 from Manager import ADDRESS, IP, KEY, PORT, QueueManager
-from Minion import Minion
 
 
 def start_manager():
@@ -27,21 +28,14 @@ def start_manager():
         )
 
 
-def start_minion(identifier: int):
-    try:
-        # Creating a Minion instance and attempting to connect to the QueueManager
-        minion = Minion(identifier=identifier)
-        logging.debug(
-            f"Connection of minion {identifier} at ({IP}:{PORT}) with authkey {KEY} succeeded"
-        )
+def start_proxy():
+    logging.debug("Proxy launched")
+    proxy.run()
 
-        # Minion starts working (processing tasks) indefinitely
-        minion.work()
-    except ConnectionRefusedError:
-        # Handling the case where the connection is refused
-        logging.error(
-            f"Connection of minion {identifier} at ({IP}:{PORT}) with authkey {KEY} refused"
-        )
+
+def start_minion(identifier: int):
+    subprocess.Popen(["build/low_level"])
+    logging.debug(f"Minion {identifier} launched")
 
 
 if __name__ == "__main__":
@@ -68,12 +62,24 @@ if __name__ == "__main__":
     # Manager #
     ###########
     # Start the manager and keep his PID to kill it later
-    p = Process(
+    p_manager = Process(
         target=start_manager,
     )
-    p.start()
+    p_manager.start()
 
     # Wait the manager to get started
+    time.sleep(1)
+
+    #########
+    # Proxy #
+    #########
+    # Start the manager and keep his PID to kill it later
+    p_proxy = Process(
+        target=start_proxy,
+    )
+    p_proxy.start()
+
+    # Wait the proxy to get started
     time.sleep(1)
 
     ########
@@ -110,5 +116,9 @@ if __name__ == "__main__":
             pass
         except KeyboardInterrupt:
             # Kill the manager will kill all the minions
-            p.kill()
+            p_manager.kill()
             print("Manager killed")
+
+            # Kill the proxy will kill all the minions
+            p_proxy.kill()
+            print("Proxy killed")
